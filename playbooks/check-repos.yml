@@ -1,0 +1,38 @@
+---
+- hosts: buildah
+  become: true
+
+
+  tasks:
+  - name: Checking Repositories are enabled
+    redhat_check_repo_status:
+      repos: ['rhel-7-server-extras-rpms']
+      status: 1
+    register: response
+
+  - name: Debug
+    debug:
+      var: response.repostat
+
+  - name: Test with items
+    redhat_check_repo_status:
+      repos: "{{ item }}"
+      status: 1
+    with_items:
+      - 'rhel-7-server-extras-rpms'
+    register: response
+
+  - name: Debug
+    debug:
+      var: response
+
+  - name: Checking Repositories are disabled 
+    redhat_check_repo_status:
+      repos: ['rh-sso-7.3-for-rhel-7-server-rpms', 'EPEL']
+      status: 0
+    register: response
+
+  - name: Debug
+    debug:
+      var: response.repostat
+
