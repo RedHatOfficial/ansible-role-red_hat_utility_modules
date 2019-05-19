@@ -1,5 +1,5 @@
 ---
-- hosts: buildah
+- hosts: all
   become: true
 
 
