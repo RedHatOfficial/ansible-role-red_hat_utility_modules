@@ -12,10 +12,11 @@ verify if a set of RPMs either exists or are absent from a target system.  Some 
 to ensure that a system, after it has been provisioned, contains the exact RPM set that was expected. 
  
 EXAMPLES:
+```
   - name: Check RPMs are present
     redhat_check_rpms:
       rpms: ['iwl1000-firmware-39.31.5.1-69.el7.noarch','pygpgme-0.3-9.el7.x86_64','iwl3160-firmware-22.0.7.0-69.el7.noarch','yum-rhn-plugin-2.0.1-10.el7.noarch','python-chardet-2.2.1-1.el7_1.noarch','setools-libs-3.3.8-4.el7.x86_64','ncurses-libs-5.9-14.20130511.el7_4.x86_64','libcgroup-0.41-20.el7.x86_64']
-      state: present
+       state: present
     register: response
  
   - debug: var=response
@@ -27,6 +28,7 @@ EXAMPLES:
     register: response
  
   - debug: var=response
+```
 
 ### redhat_check_repo_status.py
 
@@ -37,6 +39,7 @@ different repo file can be speficied using the repofile: argument.
  
 EXAMPLES:
 
+```
   - name: Checking Repositories are enabled
     redhat_check_repo_status:
       repos: ['rhel-7-server-extras-rpms']
@@ -57,3 +60,4 @@ EXAMPLES:
   - name: Debug
     debug:
       var: response.repostat
+```
