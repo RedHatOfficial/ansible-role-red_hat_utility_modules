@@ -30,6 +30,27 @@ EXAMPLES:
   - debug: var=response
 ```
 
+### redhat_check_yum_pkgs.py
+
+This module s not much different than the redhat_check_rpms module.  The difference is that it uses the Yum DB to check 
+a list of RPM packagess against a target systems installed RPMs. This is supposed to be faster than using the standard
+yum command to check for installed packages.  You can use this module in the case you want to check if packges are
+already installed ('present') on a system before installing them using the Ansible 'package' mpdule. Some of our customers 
+use this to ensure that a system, after it has been provisioned, contains the exact RPM set that were expected. 
+
+Also notice that we don't pass use the full rpm package name that normally includes the version. 
+
+EXAMPLES:
+```
+  - name: Check that RPM packages are present
+    redhat_check_yum_pkgs:
+      pkgs: ['pygpgme','yum-rhn-plugin','setools-libs','ncurses-libs','libcgroup']
+      state: present
+    register: response
+ 
+  - debug: var=response
+```
+
 ### redhat_check_repo_status.py
 
 This module checks that the repositories on a target system are either enabled or disabled. The idea is that using 
