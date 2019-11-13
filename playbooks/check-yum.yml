@@ -1,0 +1,14 @@
+---
+- hosts: all
+  become: true
+  remote_user: root
+
+
+  tasks:
+  - name: Check RPMs
+    redhat_check_yum_pkgs:
+      pkgs: ['pygpgme','yum','setools-libs','ncurses-libs','libcgroup']
+      state: present
+    register: response
+ 
+  - debug: var=response
