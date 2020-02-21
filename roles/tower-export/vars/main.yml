@@ -1,0 +1,7 @@
+---
+# vars file for pcte-tower-export
+tower_admin: 
+tower_password:
+working_path:
+postgres_password:
+postgres_host:

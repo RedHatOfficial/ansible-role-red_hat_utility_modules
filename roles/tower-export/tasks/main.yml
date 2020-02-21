@@ -1,0 +1,48 @@
+---
+# tasks file for pcte-tower-export
+- name: creating tower_cli.cfg file
+  template:
+    src: tower_cli.cfg.j2
+    dest: "{{ working_path }}/.tower_cli.cfg"
+
+- name: copying psycopg tarball to host
+  copy:
+    src: psycopg2.tar
+    dest: /tmp/psycopg2.tar
+
+- name: unarchiving psycopg2 tarball
+  unarchive:
+    src: /tmp/psycopg2.tar
+    dest: /tmp
+    remote_src: yes
+
+- name: pip install psycopg2
+  pip:
+    name: psycopg2
+    extra_args: "--no-index --find-links=file:///tmp/psycopg2"
+    executable: pip
+
+- name: copying conf_setting table to tmp dir (tower settings table)
+  command: psql -h {{ postgres_host }} -U awx awx -c "\copy (select * from conf_setting) to '/tmp/conf_setting-{{ ansible_date_time.date }}.pgsql';"
+  environment:
+    PGPASSWORD: "{{ postgres_password }}"
+  register: conf_setting
+
+- name: print conf_setting table content
+  debug:
+    var: conf_setting
+
+- name: exporting all content from tower (non server settings content)
+  tower_receive:
+    all: True
+    tower_config_file: "{{ working_path }}/.tower_cli.cfg"
+  register: tower
+
+- name: print objects
+  debug:
+    var: tower.assets
+
+- name: copy content into json file
+  copy:
+    content: "{{ tower.assets }}"
+    dest: "/tmp/tower-export-{{ ansible_date_time.date }}.json"
